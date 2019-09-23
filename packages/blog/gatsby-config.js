@@ -8,7 +8,7 @@ module.exports = {
   siteMetadata: {
     title: `Pair-Roulette`,
     author: `Charles-Henri GUERIN`,
-    description: `Toutes les nouveautés sur pair-roulette.`,
+    description: `Toutes les nouveautés sur Pair-Roulette.`,
     social: [
       {
         name: `Charles-Henri GUERIN`,
