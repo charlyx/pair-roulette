@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import ReactSelect from 'react-select'
-import { useFirebaseAuth } from '@use-firebase/auth';
-import { useFirebaseApp } from '@use-firebase/app'
+import { useFirebaseAuth, useFirebaseApp } from './firebase';
 import langages from './langages.json'
 
 const options = langages.map(lang => ({
@@ -11,15 +10,17 @@ const options = langages.map(lang => ({
 
 export function Preferences() {
   const [preferences, setPreferences] = useState([])
-  const app = useFirebaseApp()
+  const app = useFirebaseApp('pair-roulette')
   const { user } = useFirebaseAuth()
 
   return (
-    <form onSubmit={() => {
+    <form onSubmit={(e) => {
+      e.preventDefault()
       app.firestore()
         .collection('users')
         .doc(user.uid)
-        .update({ langages })
+        .update({ langages: preferences.map(({ value }) => value) })
+      return false
     }}>
       <ReactSelect
         options={options}

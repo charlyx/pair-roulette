@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFirebaseAuth } from '@use-firebase/auth';
+import { useFirebaseAuth } from './firebase';
 import { LoginPage } from './LoginPage'
 import { Roulette } from './Roulette'
 

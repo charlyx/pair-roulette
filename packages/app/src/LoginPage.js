@@ -1,19 +1,14 @@
 import React from 'react';
-import { useFirebaseAuth, AuthProvider } from '@use-firebase/auth';
+import { useFirebaseAuth } from './firebase';
 
 export const LoginPage = () => {
-  const { signIn, signInError, createAuthProvider } = useFirebaseAuth();
-
-  const onSignIn = authProvider => {
-    const provider = createAuthProvider(authProvider);
-    signIn(provider);
-  };
+  const { signIn, signInError } = useFirebaseAuth();
 
   return (
     <div>
       <h1>Please Sign In</h1>
       <p>
-        <button onClick={() => onSignIn(AuthProvider.GITHUB)}>
+        <button onClick={() => signIn()}>
           Sign In with GitHub
         </button>
       </p>
