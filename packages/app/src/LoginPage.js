@@ -8,7 +8,7 @@ export const LoginPage = () => {
     <div>
       <h1>Please Sign In</h1>
       <p>
-        <button onClick={() => signIn()}>
+        <button onClick={signIn}>
           Sign In with GitHub
         </button>
       </p>
