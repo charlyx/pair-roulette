@@ -5,6 +5,9 @@
   <a href="https://github.com/charlyx/pair-roulette/blob/master/LICENSE">
     <img alt="License: Apache-2.0" src="https://img.shields.io/github/license/charlyx/pair-roulette" target="_blank" />
   </a>
+  <a href="https://app.netlify.com/sites/vigorous-williams-80badc/deploys">
+    <img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/8a7f4ed5-1da5-4ec2-9d5d-c2c6b2641713/deploy-status" />
+  </a>  
   <a href="https://twitter.com/charlyx">
     <img alt="Twitter: charlyx" src="https://img.shields.io/twitter/follow/charlyx.svg?style=social" target="_blank" />
   </a>
