@@ -20,7 +20,7 @@
 
 ### 🏠 [Homepage](https://blog.pair-roulette.dev)
 
-## :tv: [Watch us develop the platform](http://multitwitch.tv/charlyx1188/yvonnickfrin)
+### :tv: [Watch us develop the platform](http://multitwitch.tv/charlyx1188/yvonnickfrin)
 
 ## Authors
 
