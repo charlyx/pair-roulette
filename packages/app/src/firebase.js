@@ -54,7 +54,6 @@ export function FirebaseAuthProvider({ children }) {
             email: user.email,
             photoURL: user.photoURL,
             username,
-            token: accessToken,
           }
           setUser(signedInUser)
           try {
@@ -79,7 +78,6 @@ export function FirebaseAuthProvider({ children }) {
 
   const signIn = async () => {
     const provider = new firebase.auth.GithubAuthProvider()
-    provider.addScope('repo')
     await firebase.auth().signInWithRedirect(provider)
   }
 
