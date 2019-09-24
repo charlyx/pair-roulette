@@ -20,11 +20,7 @@
 
 ### 🏠 [Homepage](https://blog.pair-roulette.dev)
 
-## Install
-
-```sh
-yarn install
-```
+## :tv: [Watch us develop the platform](http://multitwitch.tv/charlyx1188/yvonnickfrin)
 
 ## Authors
 
