@@ -38,7 +38,7 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2019 [Charles-Henri GUÉRIN](https://github.com/charlyx), 
-[Yvonnick FRIN](https://github.com/frinyvonnick), .<br />
+[Yvonnick FRIN](https://github.com/frinyvonnick).<br />
 This project is [Apache-2.0](https://github.com/charlyx/pair-roulette/blob/master/LICENSE) licensed.
 
 ***
