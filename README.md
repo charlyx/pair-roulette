@@ -1,3 +1,4 @@
+
 <h1 align="center">
   :woman_technologist: :earth_africa: :man_technologist:
   <br />
@@ -11,7 +12,10 @@
   </a>
   <a href="https://app.netlify.com/sites/vigorous-williams-80badc/deploys">
     <img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/8a7f4ed5-1da5-4ec2-9d5d-c2c6b2641713/deploy-status" />
-  </a>  
+  </a>
+  <a href="https://github.com/charlyx/pair-roulette/graphs/contributors">
+    <img alt="All Contributors" src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square" />
+  </a>
   <a href="https://twitter.com/charlyx">
     <img alt="Twitter: charlyx" src="https://img.shields.io/twitter/follow/charlyx.svg?style=social" target="_blank" />
   </a>
@@ -44,6 +48,27 @@ Give a ⭐️ if this project helped you!
 Copyright © 2019 [Charles-Henri GUÉRIN](https://github.com/charlyx), 
 [Yvonnick FRIN](https://github.com/frinyvonnick).<br />
 This project is [Apache-2.0](https://github.com/charlyx/pair-roulette/blob/master/LICENSE) licensed.
+
+## ✨ Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="http://charlyx.dev"><img src="https://avatars2.githubusercontent.com/u/481446?v=4" width="100px;" alt="Charles-Henri GUERIN"/><br /><sub><b>Charles-Henri GUERIN</b></sub></a><br /><a href="https://github.com/Charlyx/pair-roulette/commits?author=charlyx" title="Code">💻</a></td>
+    <td align="center"><a href="https://yvonnickfrin.dev"><img src="https://avatars0.githubusercontent.com/u/13099512?v=4" width="100px;" alt="Yvonnick FRIN"/><br /><sub><b>Yvonnick FRIN</b></sub></a><br /><a href="https://github.com/Charlyx/pair-roulette/commits?author=frinyvonnick" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.franck-abgrall.me/"><img src="https://avatars3.githubusercontent.com/u/9840435?v=4" width="100px;" alt="Franck Abgrall"/><br /><sub><b>Franck Abgrall</b></sub></a><br /><a href="https://github.com/Charlyx/pair-roulette/commits?author=kefranabg" title="Documentation">📖</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
