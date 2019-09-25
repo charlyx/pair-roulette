@@ -1,16 +1,18 @@
 import React from 'react'
 import { useFirebaseAuth } from './firebase';
 
-import { Preferences } from './Preferences'
+import PreferencesPage from '../src/components/pages/PreferencesPage/index'
 
-export function Roulette() {
+function RoulettePage() {
   const { signOut, user } = useFirebaseAuth()
 
   return (
     <>
-      <Preferences />
+      <PreferencesPage />
       <pre>{JSON.stringify(user, null, 2)}</pre>
       <button onClick={signOut}>Me déconnecter</button>
     </>
   )
 }
+
+export default RoulettePage

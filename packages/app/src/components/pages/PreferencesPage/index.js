@@ -8,7 +8,7 @@ const options = langages.map(lang => ({
   label: lang,
 }))
 
-export function Preferences() {
+function PreferencesPage() {
   const [preferences, setPreferences] = useState([])
   const app = useFirebaseApp('pair-roulette')
   const { user } = useFirebaseAuth()
@@ -38,3 +38,5 @@ export function Preferences() {
     </form>
   )
 }
+
+export default PreferencesPage

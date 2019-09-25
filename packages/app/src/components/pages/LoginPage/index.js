@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFirebaseAuth } from './firebase';
 
-export const LoginPage = () => {
+const LoginPage = () => {
   const { signIn, signInError } = useFirebaseAuth();
 
   return (
@@ -19,3 +19,5 @@ export const LoginPage = () => {
     </div>
   );
 };
+
+export default LoginPage;
