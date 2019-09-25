@@ -8,5 +8,10 @@
   "author": "Charles-Henri GUÉRIN <charleshenri.guerin@icloud.com>",
   "license": "Apache-2.0",
   "private": true,
-  "workspaces": ["packages/**"]
+  "workspaces": [
+    "packages/**"
+  ],
+  "devDependencies": {
+    "all-contributors-cli": "^6.9.1"
+  }
 }
