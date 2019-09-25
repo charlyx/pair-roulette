@@ -1,5 +1,9 @@
-<p align="center">:woman_technologist: :earth_africa: :man_technologist:</p>
-<h1 align="center">Welcome to pair-roulette 👋</h1>
+<h1 align="center">
+  :woman_technologist: :earth_africa: :man_technologist:
+  <br />
+  <br />
+  Welcome to pair-roulette
+</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/charlyx/pair-roulette/blob/master/LICENSE">
