@@ -19,7 +19,10 @@ export function Preferences() {
       app.firestore()
         .collection('users')
         .doc(user.uid)
-        .update({ langages: preferences.map(({ value }) => value) })
+        .update({
+          langages: preferences.map(({ value }) => value),
+          modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
       return false
     }}>
       <ReactSelect

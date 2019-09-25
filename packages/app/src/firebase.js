@@ -54,6 +54,7 @@ export function FirebaseAuthProvider({ children }) {
             email: user.email,
             photoURL: user.photoURL,
             username,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           }
           setUser(signedInUser)
           try {
