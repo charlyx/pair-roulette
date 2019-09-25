@@ -4,6 +4,12 @@ module.exports = {
       resolve: `gatsby-theme-blog`,
       options: {},
     },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-147674244-1",
+      },
+    },
   ],
   siteMetadata: {
     title: `Pair-Roulette`,
