@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "firebase": "^6.6.2",
+    "firebase-admin": "^8.6.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.2",
@@ -29,5 +30,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@firebase/testing": "^0.13.3",
+    "faker": "^4.1.0",
+    "mocha": "^6.2.1"
   }
 }
