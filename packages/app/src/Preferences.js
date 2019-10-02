@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactSelect from 'react-select'
-import { useFirebaseAuth, useFirebaseApp } from './firebase.js';
+import { useFirebaseAuth, useFirebaseApp } from './firebase';
 import langages from './langages.json'
 
 const options = langages.map(lang => ({
