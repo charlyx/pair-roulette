@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactSelect from 'react-select'
-import { useFirebaseAuth, useFirebaseApp } from './firebase';
+import { useFirebaseAuth, useFirebaseApp } from './firebase.js';
 import langages from './langages.json'
 
 const options = langages.map(lang => ({
@@ -21,7 +21,7 @@ export function Preferences() {
         .doc(user.uid)
         .update({
           langages: preferences.map(({ value }) => value),
-          modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          modifiedAt: app.firestore.FieldValue.serverTimestamp(),
         })
       return false
     }}>

@@ -4,7 +4,7 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import config from './config.json'
 
-const app = firebase.initializeApp(config)
+firebase.initializeApp(config)
 
 const AuthContext = createContext()
 
@@ -13,7 +13,7 @@ export function useFirebaseAuth() {
 }
 
 export function useFirebaseApp() {
-  return app
+  return firebase
 }
 
 export function FirebaseAuthProvider({ children }) {
@@ -58,7 +58,7 @@ export function FirebaseAuthProvider({ children }) {
           }
           setUser(signedInUser)
           try {
-            await app.firestore()
+            await firebase.firestore()
               .collection('users')
               .doc(signedInUser.uid)
               .set(signedInUser)
