@@ -4,7 +4,6 @@
   "description": "A platform for Open-Source collaboration with random people all over the world",
   "homepage": "https://blog.pair-roulette.dev",
   "main": "src/index.js",
-  "repository": "git@github.com:charlyx/pair-roulette.git",
   "author": "Charles-Henri GUÉRIN <charleshenri.guerin@icloud.com> (https://charlyx.dev)",
   "contributors": [
     "Yvonnick FRIN <frin.yvonnick@gmail.com> (http://yvonnickfrin.dev)"
@@ -44,7 +43,7 @@
     "@firebase/testing": "^0.13.3",
     "faker": "^4.1.0"
   },
-   "repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/charlyx/pair-roulette.git",
     "directory": "packages/app"
