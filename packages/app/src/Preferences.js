@@ -21,7 +21,7 @@ export function Preferences() {
         .doc(user.uid)
         .update({
           langages: preferences.map(({ value }) => value),
-          modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          modifiedAt: app.firestore.FieldValue.serverTimestamp(),
         })
       return false
     }}>
