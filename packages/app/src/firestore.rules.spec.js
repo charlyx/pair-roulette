@@ -32,11 +32,18 @@ describe('Firestore rules', () => {
     await firebase.assertFails(profile)
   })
 
-  it('should enforce the createdAt date in user profiles', async () => {
-    const uid = 'alice'
-    const alice = authedApp({ uid })
+  it('should allow users to create a profile', async () => {
+    const alice = authedApp({ uid: 'alice' })
 
-    const profile = alice.collection('users').doc(uid).set({ uid })
+    const profile = createProfile(alice, 'alice')
+
+    await firebase.assertSucceeds(profile)
+  })
+
+  it('should enforce the createdAt date in user profiles', async () => {
+    const alice = authedApp({ uid: 'alice' })
+
+    const profile = alice.collection('users').doc('alice').set({ uid: 'alice' })
 
     await firebase.assertFails(profile)
   })
@@ -76,11 +83,10 @@ describe('Firestore rules', () => {
   })
 
   it('should enforce the modifiedAt date in user profiles', async () => {
-    const uid = 'alice'
-    const alice = authedApp({ uid })
-    await createProfile(alice, uid)
+    const alice = authedApp({ uid: 'alice' })
+    await createProfile(alice, 'alice')
 
-    const profile = alice.collection('users').doc(uid).update({ uid })
+    const profile = alice.collection('users').doc('alice').update({ uid: 'alice' })
 
     await firebase.assertFails(profile)
   })
