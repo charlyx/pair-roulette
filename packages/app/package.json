@@ -1,6 +1,15 @@
 {
   "name": "@pair-roulette/app",
   "version": "0.1.0",
+  "description": "A platform for Open-Source collaboration with random people all over the world",
+  "homepage": "https://blog.pair-roulette.dev",
+  "main": "src/index.js",
+  "repository": "git@github.com:charlyx/pair-roulette.git",
+  "author": "Charles-Henri GUÉRIN <charleshenri.guerin@icloud.com> (https://charlyx.dev)",
+  "contributors": [
+    "Yvonnick FRIN <frin.yvonnick@gmail.com> (http://yvonnickfrin.dev)"
+  ],
+  "license": "Apache-2.0",
   "private": true,
   "dependencies": {
     "firebase": "^6.6.2",
