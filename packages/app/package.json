@@ -29,5 +29,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< Updated upstream
+=======
+  },
+  "devDependencies": {
+    "@firebase/testing": "^0.13.3",
+    "faker": "^4.1.0"
+  },
+   "repository": {
+    "type": "git",
+    "url": "https://github.com/charlyx/pair-roulette.git",
+    "directory": "packages/app"
+>>>>>>> Stashed changes
   }
 }
