@@ -28,28 +28,28 @@ describe('Roulette', () => {
   })
 
   it('should match a user', async () => {
-    const users = await getAllUsers(app)
+    const user = await getUser(app)
 
-    const matchedUser = await roulette(users[0].uid, app)
+    const matchedUser = await roulette(user.uid, app)
 
-    expect(matchedUser.preferences.some(langage => users[0].preferences.includes(langage))).toBe(true)
+    expect(matchedUser.preferences).toEqual(expect.arrayContaining(['A++']))
   })
 
   it('should match an available user', async () => {
-    const users = await getAllUsers(app)
+    const user = await getUser(app)
 
-    const matchedUser = await roulette(users[0].uid, app)
+    const matchedUser = await roulette(user.uid, app)
 
     expect(matchedUser.available).toBe(true)
   })
 
   it('should get last signed up user matching criterias', async () => {
-    const users = await getAllUsers(app)
+    const user = await getUser(app)
+    const expectedDate = new Date('2019-10-06').toDateString()
 
-    const matchedUser = await roulette(users[0].uid, app)
+    const matchedUser = await roulette(user.uid, app)
 
-    const date = firebase.firestore.Timestamp.fromDate(new Date('2019-10-06'))
-    expect(matchedUser.createdAt).toEqual(date)
+    expect(matchedUser.createdAt.toDate().toDateString()).toEqual(expectedDate)
   })
 })
 
@@ -58,24 +58,27 @@ function getApp() {
 }
 
 function createRandomProfiles(app) {
-  return Array.from({ length: 100 }, () => createRandomProfile(app))
+  const batch = app.firestore().batch()
+
+  for(let i = 0; i < 100; i++) {
+    createRandomProfile(app, batch)
+  }
+
+  return batch.commit()
 }
 
-function createRandomProfile(app) {
+function createRandomProfile(app, batch) {
   const uid = faker.random.uuid()
-  const createdAt = faker.date.between('2019-09-22', '2019-10-06')
+  const createdAt = faker.date.between('2019-09-22', '2019-10-07')
+  const ref = app.firestore().collection('users').doc(uid)
 
-  return app
-    .firestore()
-    .collection('users')
-    .doc(uid)
-    .set({
-      uid,
-      displayName: `${faker.name.firstName()} ${faker.name.lastName()}`,
-      preferences: generatePreferences(),
-      available: faker.random.boolean(),
-      createdAt: firebase.firestore.Timestamp.fromDate(new Date(createdAt)),
-    })
+  batch.set(ref, {
+    uid,
+    displayName: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    preferences: generatePreferences(),
+    available: faker.random.boolean(),
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date(createdAt)),
+  })
 }
 
 function generatePreferences() {
@@ -94,11 +97,13 @@ function generatePreferences() {
   return [...set]
 }
 
-function getAllUsers(app) {
+function getUser(app) {
   return app
     .firestore()
     .collection('users')
+    .orderBy('createdAt', 'asc')
+    .limit(1)
     .get()
-    .then(snapshot => snapshot.docs)
-    .then(docs => docs.map(doc => doc.data()))
+    .then(snapshot => snapshot.docs[0])
+    .then(doc => doc.data())
 }
