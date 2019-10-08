@@ -84,18 +84,18 @@ function createRandomProfile(app, batch) {
 
 function generatePreferences() {
   const size = faker.random.number({ min: 1, max: 3 })
-  const set = new Set()
+  const preferences = new Set()
 
   do {
     const index = faker.random.number({ min: 0, max: 20 })
     const lang = langages[index]
 
-    if (set.has(lang)) continue
+    if (preferences.has(lang)) continue
 
-    set.add(lang)
-  } while (set.size !== size)
+    preferences.add(lang)
+  } while (preferences.size !== size)
 
-  return [...set]
+  return [...preferences]
 }
 
 function getUser(app) {
