@@ -61,6 +61,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://www.franck-abgrall.me/"><img src="https://avatars3.githubusercontent.com/u/9840435?v=4" width="100px;" alt="Franck Abgrall"/><br /><sub><b>Franck Abgrall</b></sub></a><br /><a href="https://github.com/charlyx/pair-roulette/commits?author=kefranabg" title="Documentation">📖</a></td>
     <td align="center"><a href="http://blog.astik.info/"><img src="https://avatars0.githubusercontent.com/u/572233?v=4" width="100px;" alt="Romain Gonord"/><br /><sub><b>Romain Gonord</b></sub></a><br /><a href="#review-astik" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/charlyx/pair-roulette/commits?author=astik" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Orodan"><img src="https://avatars1.githubusercontent.com/u/7422824?v=4" width="100px;" alt="Jimmy Kasprzak"/><br /><sub><b>Jimmy Kasprzak</b></sub></a><br /><a href="#review-orodan" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/bpetetot"><img src="https://avatars3.githubusercontent.com/u/516360?v=4" width="100px;" alt="Benjamin Petetot"/><br /><sub><b>Benjamin Petetot</b></sub></a><br /><a href="https://github.com/charlyx/pair-roulette/commits?author=bpetetot" title="Code">💻</a></td>
   </tr>
 </table>
 
