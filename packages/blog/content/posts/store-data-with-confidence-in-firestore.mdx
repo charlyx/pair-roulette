@@ -20,6 +20,8 @@ Pour profiter de cette liberté vous devrez écrire des
 Ces règles définissent les accès en lecture et écriture pour les différents 
 documents que vous serez amené à stocker.
 
+*⚠️ La sécurisation des données pour une utilisation côté serveur diffère de celle présentée dans cet article.*
+
 Analysons ensemble les règles mises en place pour la gestion des profils dans 
 **Pair-Roulette** :
 
@@ -41,22 +43,22 @@ service cloud.firestore {
 ```
 
 * Toutes les opérations de lecture et écriture ne sont possible que par des 
-personnes authentifiées dans l'application. 
+personnes authentifiées dans l'application.   
 *Le code suivant permet de lire l'identifiant du client connecté : 
 `request.auth.uid`.*
 
-* La lecture d'un profil est possible uniquement par son propriétaire.
+* La lecture d'un profil est possible uniquement par son propriétaire.  
 *Nous comparons l'identifiant du client à celui du profil avec le code suivant 
 `resource.data.uid == request.auth.uid`.*
 
-* La mise à jour d'un profil est possible uniquement par son propriétaire et 
-si l'heure de modification correspond à l'heure de la requête.
-*Le code suivant permet de lire l'heure de la requête : `request.time`.*
+* La mise à jour d'un profil est possible uniquement par son propriétaire.  
+*Nous nous assurons aussi de la présence de la propriété `modifiedAt` pour 
+des raisons fonctionnelles et non de sécurité.*
 
-* La création d'un profil est possible uniquement si : 
-  * celui-ci n'existe pas déjà
-  * la personne authentifiée correspond bien au profil à créer
-  * l'heure de création correspond bien à l'heure de la requête 
+* La création d'un profil est possible uniquement si celui-ci n'existe pas 
+et si la personne authentifiée correspond bien au profil à créer.  
+*Nous nous assurons aussi de la présence de la propriété `createdAt` pour 
+des raisons fonctionnelles et non de sécurité.*
 
 ## Assurer la sécurité de ses données
 
@@ -73,7 +75,7 @@ Nul besoin de :
 * ~~effectuer les tests en ligne~~
 * ~~dépasser les quotas et faire des dépenses supplémentaires~~
 
-⚠️ L'utilisation de ce service nécessite de créer un client en utilisant [@firebase/testing](https://www.npmjs.com/package/@firebase/testing).
+*⚠️ L'utilisation de ce service nécessite de créer un client en utilisant [@firebase/testing](https://www.npmjs.com/package/@firebase/testing).*
 
 Analysons ensemble comment les règles de sécurités sont vérifiées chez **Pair-Roulette**.
 
@@ -132,7 +134,7 @@ terminée :
 
 5. Testons la première règle :
 
-> Toutes les opérations de lecture et écriture ne sont possible que par des 
+> Toutes les opérations de lecture et écriture ne sont possibles que par des 
 > personnes authentifiées dans l'application.
 
 Le code suivant créé un client anonyme et tente de créer le profil `alice`.  
@@ -153,17 +155,18 @@ Nous vérifions que la création échoue.
 
 > La lecture d'un profil est possible uniquement par son propriétaire.
 
-Le code suivant créé un client authentifié avec `alice` et créé un profil à 
-son nom.
-Nous vérifions que la création est un succés.
+Le code suivant créé deux clients authentifiés : `alice` et `bob`.  
+Alice créée son compte puis Bob essaie de lire le profil de Alice.  
+Nous vérifions que cette dernière action échoue.
 
 ```js
-  it('should allow users to create a profile', async () => {
+  it('should only allow owner to read document', async () => {
     const alice = authedApp({ uid: 'alice' })
+    const bob = authedApp({ uid: 'bob' })
 
-    const profile = createProfile(alice, 'alice')
+    await createProfile(alice, 'alice')
 
-    await firebase.assertSucceeds(profile)
+    await firebase.assertFails(getProfile(bob, 'alice'))
   })
 ```
 
