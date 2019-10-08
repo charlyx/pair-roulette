@@ -46,6 +46,15 @@
         "review",
         "code"
       ]
+    },
+    {
+      "login": "orodan",
+      "name": "Jimmy Kasprzak",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7422824?v=4",
+      "profile": "https://github.com/Orodan",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7
