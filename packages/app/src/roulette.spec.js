@@ -1,9 +1,7 @@
 const firebase = require('@firebase/testing')
 const faker = require('faker')
 const path = require('path')
-const fs = require('fs')
-const util = require('util')
-const readFileAsync = util.promisify(fs.readFile)
+const { promises: fs } = require('fs')
 const langages = require('./langages.json')
 const roulette = require('./roulette.function.js')
 
@@ -15,7 +13,7 @@ describe('Roulette', () => {
 
   beforeAll(async () => {
     const rulesPath = path.join(__dirname, 'firestore.rules')
-    const rules = await readFileAsync(rulesPath, 'utf8')
+    const rules = await fs.readFile(rulesPath, 'utf8')
     await firebase.loadFirestoreRules({ projectId, rules })
     await createRandomProfiles(app)
   })
