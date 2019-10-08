@@ -27,6 +27,16 @@ describe('Roulette', () => {
     console.log(`View rule coverage information at ${coverageUrl}\n`)
   })
 
+  it('should throw if user does not exist', async () => {
+    expect.assertions(1)
+
+    try {
+      await roulette('unknown', app)
+    } catch (e) {
+      expect(e.message).toEqual('User unknown does not exist.')
+    }
+  })
+
   it('should match a user', async () => {
     const user = await getUser(app)
 

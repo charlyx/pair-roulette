@@ -6,8 +6,10 @@ async function roulette(uid, app) {
   const myDocument = users.doc(uid)
 
   const myPreferences = await myDocument.get()
-    .then(doc => doc.data())
-    .then(me => me.preferences)
+    .then(doc => {
+      if (!doc.exists) throw new Error(`User ${uid} does not exist.`)
+      return doc.data().preferences
+    })
 
   await myDocument.update({ available: false })
 
@@ -20,20 +22,24 @@ async function roulette(uid, app) {
       .orderBy('createdAt', 'desc')
       .limit(1)
       .get()
-      .then(snapshot => snapshot.docs[0])
-      .then(doc => doc.data())
-  } while (!pair)
+      .then(snapshot => {
+        if (snapshot.empty) return undefined
+        return snapshot.docs[0].data()
+      })
+  } while (!pair && myPreferences.length > 0)
 
   if (pair) {
-    return users.doc(pair.uid)
+    const pairRef = users.doc(pair.uid)
+
+    return pairRef
       .update({ available: false })
-      .then(() => ({
-        ...pair,
-        available: false,
-      }))
+      .then(() => pairRef.get())
+      .then(doc => doc.data())
   }
 
-  return myDocument.update({ available: true })
+  await myDocument.update({ available: true })
+
+  return undefined
 }
 
 module.exports = roulette
