@@ -66,9 +66,12 @@ Pour répondre à cette problématique je vous propose l'utilisation de [Firebas
 Cette suite vous offre la possibilité d'émuler un service Firebase sur votre 
 machine.
 
-* Pas besoin de lancer des tests sur une base de donnée de test en ligne.
-* Pas besoin de créer un compte de test
-* Pas besoin de dépasser les quotas et faire des dépenses
+Nul besoin de :
+
+* ~~créer une base de données de test~~
+* ~~créer un compte de test~~
+* ~~effectuer les tests en ligne~~
+* ~~dépasser les quotas et faire des dépenses supplémentaires~~
 
 ⚠️ L'utilisation de ce service nécessite de créer un client en utilisant [@firebase/testing](https://www.npmjs.com/package/@firebase/testing).
 
@@ -164,6 +167,8 @@ Nous vérifions que la création est un succés.
   })
 ```
 
+Et voilà ! Vous êtes assurés (en parti, car les tests ci-dessus ne sont pas exhaustifs).
 
-Les exemples de code ci-dessus sont extrait de la suite de test qui assure le bon fonctionnement des règles de sécurité dans **Pair-Roulette**.  
 Vous pouvez retrouver le code en entier [en suivant ce lien](https://github.com/charlyx/pair-roulette/blob/ec5bc37700f92e7fd6ff793f56af2070afc51ac3/packages/app/src/firestore.rules.spec.js).
+
+La réalisation des règles de sécurité est disponible en re-diffusion sur [YouTube](https://youtu.be/u5Ng0yQjCR0).
