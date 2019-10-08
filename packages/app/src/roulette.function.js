@@ -1,20 +1,39 @@
 const admin = require('firebase-admin')
 
 async function roulette(uid, app) {
-  const users = await app
-    .firestore()
-    .collection('users')
-    .orderBy('createdAt', 'desc')
-    .where('available', '==', true)
-    .get()
-    .then(snapshot => snapshot.docs)
-    .then(docs => docs.map(doc => doc.data()))
+  const users = app.firestore().collection('users')
 
-  const me = users.find(user => user.uid === uid)
+  const myDocument = users.doc(uid)
 
-  return users
-    .filter(user => user.uid !== uid)
-    .find(user => user.preferences.some(lang => me.preferences.includes(lang)))
+  const myPreferences = await myDocument.get()
+    .then(doc => doc.data())
+    .then(me => me.preferences)
+
+  await myDocument.update({ available: false })
+
+  let pair = undefined
+
+  do {
+    pair = await users
+      .where('available', '==', true)
+      .where('preferences', 'array-contains', myPreferences.shift())
+      .orderBy('createdAt', 'desc')
+      .limit(1)
+      .get()
+      .then(snapshot => snapshot.docs[0])
+      .then(doc => doc.data())
+  } while (!pair)
+
+  if (pair) {
+    return users.doc(pair.uid)
+      .update({ available: false })
+      .then(() => ({
+        ...pair,
+        available: false,
+      }))
+  }
+
+  return myDocument.update({ available: true })
 }
 
 module.exports = roulette

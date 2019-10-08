@@ -32,20 +32,21 @@ describe('Roulette', () => {
 
     const matchedUser = await roulette(user.uid, app)
 
-    expect(matchedUser.preferences).toEqual(expect.arrayContaining(['A++']))
+    expect(matchedUser.preferences).toEqual(expect.arrayContaining(['ACC']))
   })
 
-  it('should match an available user', async () => {
+  it('should make users unavailable', async () => {
     const user = await getUser(app)
 
     const matchedUser = await roulette(user.uid, app)
 
-    expect(matchedUser.available).toBe(true)
+    expect(user.available).toBe(false)
+    expect(matchedUser.available).toBe(false)
   })
 
   it('should get last signed up user matching criterias', async () => {
     const user = await getUser(app)
-    const expectedDate = new Date('2019-10-06').toDateString()
+    const expectedDate = new Date('2019-09-22').toDateString()
 
     const matchedUser = await roulette(user.uid, app)
 
@@ -82,7 +83,7 @@ function createRandomProfile(app, batch) {
 }
 
 function generatePreferences() {
-  const size = faker.random.number({ min: 1, max: 4 })
+  const size = faker.random.number({ min: 1, max: 3 })
   const set = new Set()
 
   do {
