@@ -1,0 +1,177 @@
+---
+title: Protégez vos données avec assurance dans Firestore
+date: 2019-10-07
+---
+
+## Firestore en quelques mots
+
+[Firestore](https://cloud.google.com/firestore/) est une base de donnée NoSQL évolutive pour le développement
+d'applications mobile, web et serveur.
+
+## Protéger ses données
+
+**Firestore** vous offre la possibilité de lire et écrire dans votre base de 
+donnée directement depuis le client.
+Ce mode de fonctionnement est assez simple et rapide à utiliser pour une personne 
+qui souhaiterait développer une application sans avoir à développer un *serveur*.
+
+Pour profiter de cette liberté vous devrez écrire des 
+[règles de sécurité](https://cloud.google.com/firestore/docs/security/get-started).
+Ces règles définissent les accès en lecture et écriture pour les différents 
+documents que vous serez amené à stocker.
+
+*⚠️ La sécurisation des données pour une utilisation côté serveur diffère de celle présentée dans cet article.*
+
+Analysons ensemble les règles mises en place pour la gestion des profils dans 
+**Pair-Roulette** :
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function itsMyProfile() { return resource.data.uid == request.auth.uid }
+    function itsMe() { return request.resource.data.uid == request.auth.uid }
+    function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)) }
+    
+    match /users/{userId} {
+      allow read: if itsMyProfile();
+      allow update: if itsMyProfile() && request.resource.data.modifiedAt == request.time;
+      allow create: if itsMe() && userNotExists() && request.resource.data.createdAt == request.time;
+    }
+  }
+}
+```
+
+* Toutes les opérations de lecture et écriture ne sont possible que par des 
+personnes authentifiées dans l'application.   
+*Le code suivant permet de lire l'identifiant du client connecté : 
+`request.auth.uid`.*
+
+* La lecture d'un profil est possible uniquement par son propriétaire.  
+*Nous comparons l'identifiant du client à celui du profil avec le code suivant 
+`resource.data.uid == request.auth.uid`.*
+
+* La mise à jour d'un profil est possible uniquement par son propriétaire.  
+*Nous nous assurons aussi de la présence de la propriété `modifiedAt` pour 
+des raisons fonctionnelles et non de sécurité.*
+
+* La création d'un profil est possible uniquement si celui-ci n'existe pas 
+et si la personne authentifiée correspond bien au profil à créer.  
+*Nous nous assurons aussi de la présence de la propriété `createdAt` pour 
+des raisons fonctionnelles et non de sécurité.*
+
+## Assurer la sécurité de ses données
+
+Ces règles étant maintenant en place, comment vérifier qu'elles fonctionnent comme prévu ?  
+
+Pour répondre à cette problématique je vous propose l'utilisation de [Firebase emulators](https://firebase.google.com/docs/emulator-suite).
+Cette suite logicielle vous offre la possibilité d'émuler un service Firebase sur votre 
+machine.
+
+Nul besoin de :
+
+* ~~créer une base de données de test~~
+* ~~créer un compte de test~~
+* ~~effectuer les tests en ligne~~
+* ~~dépasser les quotas et faire des dépenses supplémentaires~~
+
+*⚠️ L'utilisation de ce service nécessite de créer un client en utilisant [@firebase/testing](https://www.npmjs.com/package/@firebase/testing).*
+
+Analysons ensemble comment les règles de sécurités sont vérifiées chez **Pair-Roulette**.
+
+1. Démarrons le service Firestore avec la commande suivante :
+```sh
+firebase emulators:start --only firestore
+```
+
+2. Chargeons les règles de sécurité au démarrage de la suite 
+de test :
+
+```js
+const firebase = require('@firebase/testing')
+const path = require('path')
+const fs = require('fs')
+const util = require('util')
+const readFileAsync = util.promisify(fs.readFile)
+
+const projectId = 'pair-roulette'
+
+describe('Firestore rules', () => {
+  beforeAll(async () => {
+    const rulesPath = path.join(__dirname, 'firestore.rules')
+    const rules = await readFileAsync(rulesPath, 'utf8')
+    await firebase.loadFirestoreRules({ projectId, rules })
+  })
+
+  // ...
+})
+```
+
+3. Nettoyons notre base de donnée avant chaque test afin d'éviter tout effet 
+de bord :
+
+```js
+  // beforeAll ...
+
+  beforeEach(async () => {
+    await firebase.clearFirestoreData({ projectId })
+  })
+```
+
+4. Clôturons toutes les applications créées une fois notre suite de test 
+terminée :
+
+```js
+  // beforeEach ...
+
+  afterAll(async () => {
+    await Promise.all(firebase.apps().map(app => app.delete()))
+
+    const coverageUrl = `http://localhost:8080/emulator/v1/projects/${projectId}:ruleCoverage.html`
+    console.log(`View rule coverage information at ${coverageUrl}\n`)
+  })
+```
+
+5. Testons la première règle :
+
+> Toutes les opérations de lecture et écriture ne sont possibles que par des 
+> personnes authentifiées dans l'application.
+
+Le code suivant créé un client anonyme et tente de créer le profil `alice`.  
+Nous vérifions que la création échoue.
+
+```js
+  // afterAll
+  it('require users to log in before creating a profile', async () => {
+    const anonymous = authedApp(null)
+
+    const profile = createProfile(anonymous, 'alice')
+
+    await firebase.assertFails(profile)
+  })
+```
+
+6. Testons la seconde règle :
+
+> La lecture d'un profil est possible uniquement par son propriétaire.
+
+Le code suivant créé deux clients authentifiés : `alice` et `bob`.  
+Alice créée son compte puis Bob essaie de lire le profil de Alice.  
+Nous vérifions que cette dernière action échoue.
+
+```js
+  it('should only allow owner to read document', async () => {
+    const alice = authedApp({ uid: 'alice' })
+    const bob = authedApp({ uid: 'bob' })
+
+    await createProfile(alice, 'alice')
+
+    await firebase.assertFails(getProfile(bob, 'alice'))
+  })
+```
+
+Et voilà ! Vous avez assuré la protection de vos données (en parti, car les tests ci-dessus ne sont pas exhaustifs).
+
+Vous pouvez retrouver le code en entier [en suivant ce lien](https://github.com/charlyx/pair-roulette/blob/ec5bc37700f92e7fd6ff793f56af2070afc51ac3/packages/app/src/firestore.rules.spec.js).
+
+La réalisation des règles de sécurité est disponible en re-diffusion sur [YouTube](https://youtu.be/u5Ng0yQjCR0).
