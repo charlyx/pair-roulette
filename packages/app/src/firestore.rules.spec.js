@@ -1,15 +1,13 @@
 const firebase = require('@firebase/testing')
 const path = require('path')
 const fs = require('fs')
-const util = require('util')
-const readFileAsync = util.promisify(fs.readFile)
-
+const fsPromises = fs.promises;
 const projectId = 'pair-roulette'
 
 describe('Firestore rules', () => {
   beforeAll(async () => {
     const rulesPath = path.join(__dirname, 'firestore.rules')
-    const rules = await readFileAsync(rulesPath, 'utf8')
+    const rules = await fsPromises.readFile(rulesPath, 'utf8')
     await firebase.loadFirestoreRules({ projectId, rules })
   })
 
