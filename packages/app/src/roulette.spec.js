@@ -1,0 +1,118 @@
+const firebase = require('@firebase/testing')
+const faker = require('faker')
+const path = require('path')
+const { promises: fs } = require('fs')
+const langages = require('./langages.json')
+const roulette = require('./roulette.function.js')
+
+faker.seed(123)
+const projectId = 'pair-roulette'
+
+describe('Roulette', () => {
+  const app = getApp()
+
+  beforeAll(async () => {
+    const rulesPath = path.join(__dirname, 'firestore.rules')
+    const rules = await fs.readFile(rulesPath, 'utf8')
+    await firebase.loadFirestoreRules({ projectId, rules })
+    await createRandomProfiles(app)
+  })
+
+  afterAll(async () => {
+    await Promise.all(firebase.apps().map(app => app.delete()))
+
+    const coverageUrl = `http://localhost:8080/emulator/v1/projects/${projectId}:ruleCoverage.html`
+    console.log(`View rule coverage information at ${coverageUrl}\n`)
+  })
+
+  it('should throw if user does not exist', async () => {
+    expect.assertions(1)
+
+    try {
+      await roulette('unknown', app)
+    } catch (e) {
+      expect(e.message).toEqual('User unknown does not exist.')
+    }
+  })
+
+  it('should match a user', async () => {
+    const user = await getUser(app)
+
+    const matchedUser = await roulette(user.uid, app)
+
+    expect(matchedUser.preferences).toEqual(expect.arrayContaining(['ACC']))
+  })
+
+  it('should make users unavailable', async () => {
+    const user = await getUser(app)
+
+    const matchedUser = await roulette(user.uid, app)
+
+    expect(user.available).toBe(false)
+    expect(matchedUser.available).toBe(false)
+  })
+
+  it('should get last signed up user matching criterias', async () => {
+    const user = await getUser(app)
+    const expectedDate = new Date('2019-09-22').toDateString()
+
+    const matchedUser = await roulette(user.uid, app)
+
+    expect(matchedUser.createdAt.toDate().toDateString()).toEqual(expectedDate)
+  })
+})
+
+function getApp() {
+  return firebase.initializeAdminApp({ projectId })
+}
+
+function createRandomProfiles(app) {
+  const batch = app.firestore().batch()
+
+  for(let i = 0; i < 100; i++) {
+    createRandomProfile(app, batch)
+  }
+
+  return batch.commit()
+}
+
+function createRandomProfile(app, batch) {
+  const uid = faker.random.uuid()
+  const createdAt = faker.date.between('2019-09-22', '2019-10-07')
+  const ref = app.firestore().collection('users').doc(uid)
+
+  batch.set(ref, {
+    uid,
+    displayName: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    preferences: generatePreferences(),
+    available: faker.random.boolean(),
+    createdAt: firebase.firestore.Timestamp.fromDate(new Date(createdAt)),
+  })
+}
+
+function generatePreferences() {
+  const size = faker.random.number({ min: 1, max: 3 })
+  const preferences = new Set()
+
+  do {
+    const index = faker.random.number({ min: 0, max: 20 })
+    const lang = langages[index]
+
+    if (preferences.has(lang)) continue
+
+    preferences.add(lang)
+  } while (preferences.size !== size)
+
+  return [...preferences]
+}
+
+function getUser(app) {
+  return app
+    .firestore()
+    .collection('users')
+    .orderBy('createdAt', 'asc')
+    .limit(1)
+    .get()
+    .then(snapshot => snapshot.docs[0])
+    .then(doc => doc.data())
+}
