@@ -1,13 +1,99 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+* {
+  color: #222;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.loginpage {
+  background-color: #50C878;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginpage__content {
+  text-align: center;
+}
+
+.loginpage__logo {
+  margin: auto;
+}
+
+.loginpage__title {
+  font-size: 6.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.loginpage__description {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.signin {
+  color: #fff;
+  background-color: #222;
+  border: 0;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  padding: 0.625rem 1rem;
+  margin: auto;
+}
+
+.signin:hover {
+  cursor: pointer;
+}
+
+.signin__github {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.625rem;
+}
+
+.logo {
+  --logo-height: 15.625rem;
+  --logo-width: 18.75rem;
+  --logo-earth-width: 11.75rem;
+  --logo-person-width: 6.25rem;
+  --logo-person-height: 10rem;
+
+  position: relative;
+  height: var(--logo-height);
+  width: var(--logo-width);
+}
+
+.logo__girl,
+.logo__earth,
+.logo__boy {
+  position: absolute;
+}
+
+.logo__earth {
+  font-size: var(--logo-earth-width);
+  left: calc((var(--logo-width) - var(--logo-earth-width)) / 2);
+}
+
+.logo__girl,
+.logo__boy {
+  font-size: var(--logo-person-width);
+  top: calc((var(--logo-height) - var(--logo-person-height)) / 2);
+  z-index: 1;
+}
+
+.logo__girl {
+  left: 0;
+}
+
+.logo__boy {
+  left: calc(var(--logo-width) - var(--logo-person-width));
 }
