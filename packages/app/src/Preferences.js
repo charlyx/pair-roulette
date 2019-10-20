@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
-import ReactSelect from 'react-select'
 import { useFirebaseAuth, useFirebaseApp } from './firebase';
-import langages from './langages.json'
-
-const options = langages.map(lang => ({
-  value: lang,
-  label: lang,
-}))
+import { LanguageInput } from './LanguageInput'
 
 export function Preferences() {
-  const [preferences, setPreferences] = useState([])
+  const [preferences, setPreferences] = useState(['', '', ''])
   const app = useFirebaseApp('pair-roulette')
   const { user } = useFirebaseAuth()
 
@@ -20,19 +14,29 @@ export function Preferences() {
         .collection('users')
         .doc(user.uid)
         .update({
-          langages: preferences.map(({ value }) => value),
+          langages: preferences,
           modifiedAt: app.firestore.FieldValue.serverTimestamp(),
         })
       return false
     }}>
-      <ReactSelect
-        options={options}
-        isMulti
-        name="langages"
-        value={preferences}
-        onChange={options => {
-          setPreferences([].concat(options))
-        }}
+      <LanguageInput
+        required
+        value={preferences[0]}
+        onChange={(value) => { setPreferences([value, ...preferences.slice(1)]) }}
+        label="First language"
+        name="first_language"
+      />
+      <LanguageInput
+        value={preferences[1]}
+        onChange={(value) => { setPreferences([preferences[0], value, preferences[2]]) }}
+        label="Second language"
+        name="second_language"
+      />
+      <LanguageInput
+        value={preferences[2]}
+        onChange={(value) => { setPreferences([...preferences.slice(0, 2), value]) }}
+        label="Third language"
+        name="third_language"
       />
       <button>Enregistrer</button>
     </form>
