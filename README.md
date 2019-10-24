@@ -64,6 +64,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/bpetetot"><img src="https://avatars3.githubusercontent.com/u/516360?v=4" width="100px;" alt="Benjamin Petetot"/><br /><sub><b>Benjamin Petetot</b></sub></a><br /><a href="https://github.com/charlyx/pair-roulette/commits?author=bpetetot" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/SirKitboard"><img src="https://avatars2.githubusercontent.com/u/5376982?v=4" width="100px;" alt="Aditya Balwani"/><br /><sub><b>Aditya Balwani</b></sub></a><br /><a href="https://github.com/charlyx/pair-roulette/commits?author=SirKitboard" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Zenigata"><img src="https://avatars1.githubusercontent.com/u/1022393?v=4" width="100px;" alt="Johan Bonneau"/><br /><sub><b>Johan Bonneau</b></sub></a><br /><a href="#blog-Zenigata" title="Blogposts">📝</a></td>
+  </tr>
 </table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
