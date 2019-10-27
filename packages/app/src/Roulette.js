@@ -9,10 +9,15 @@ export function Roulette() {
   const updatePreferences = useUpdatePreferences()
 
   return (
-    <>
-      <Preferences onSubmit={updatePreferences} />
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-      <button onClick={signOut}>Me déconnecter</button>
-    </>
+    <div className="profile">
+      <header className="profile__header">
+        <div className="profile__trademark">Pair-Roulette</div>
+        <button className="profile__signout" onClick={signOut}>Sign out</button>
+      </header>
+      <main>
+        <h1>Choose your languages preferences</h1>
+        <Preferences onSubmit={updatePreferences} />
+      </main>
+    </div>
   )
 }
