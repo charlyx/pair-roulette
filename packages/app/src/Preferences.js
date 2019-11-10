@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { func } from 'prop-types'
+import React, { useState, useEffect } from 'react'
 import langages from './langages.json'
+import { usePreferences } from './usePreferences'
 
-Preferences.propTypes = {
-  onSubmit: func.isRequired,
-}
-
-export function Preferences({ onSubmit }) {
+export function Preferences() {
   const [preferences, setPreferences] = useState(['-1', '-1', '-1'])
+  const [storedPreferences, updatePreferences] = usePreferences()
+
+  useEffect(() => {
+    setPreferences(storedPreferences)
+  }, [storedPreferences])
 
   const firstLanguages = langages.filter(lang => {
     return ![preferences[1], preferences[2]].includes(lang)
@@ -22,8 +23,8 @@ export function Preferences({ onSubmit }) {
   return (
     <form onSubmit={e => {
       e.preventDefault()
-      const newPreferences = preferences.filter(lang => lang !== '-1')
-      return onSubmit(newPreferences)
+      const newPreferences = preferences.filter(lang => lang && lang !== '-1')
+      return updatePreferences(newPreferences)
     }}>
       <label htmlFor="firstLanguage">First language</label>
       <select

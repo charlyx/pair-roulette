@@ -24,6 +24,7 @@ export function FirebaseAuthProvider({ children }) {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async user => {
+      console.log({ user })
       if (user) {
         // User is signed in.
         try {

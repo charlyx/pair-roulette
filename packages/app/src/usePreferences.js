@@ -19,7 +19,6 @@ export function usePreferences() {
       .then(doc => doc.data())
       .then(data => data.langages)
       .then(setLangages)
-      .catch(e => console.error(e))
   }, [loading])
 
   return [
