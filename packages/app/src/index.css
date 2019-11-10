@@ -1,5 +1,7 @@
 * {
-  color: #222;
+  --primary: #222;
+
+  color: var(--primary);
   box-sizing: border-box;
 }
 
@@ -8,10 +10,12 @@ html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --primary-background-color: #50C878;
 }
 
 .loginpage {
-  background-color: #50C878;
+  background-color: var(--primary-background-color) ;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -96,4 +100,54 @@ html {
 
 .logo__boy {
   left: calc(var(--logo-width) - var(--logo-person-width));
+}
+
+.profile__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem;
+  height: 3.125rem;
+  font-weight: 700;
+  background-color: var(--primary-background-color);
+}
+
+.profile__trademark {
+  font-size: xx-large;
+}
+
+.profile__signout {
+  color: #fff;
+  background-color: #222;
+  border: 0;
+  border-radius: 5px;
+  padding: 0.625rem 1rem;
+}
+
+.profile form button {
+  color: #fff;
+  background-color: #222;
+  border: 0;
+  border-radius: 5px;
+  padding: 0.625rem 1rem;
+}
+
+.profile main {
+  width: 60rem;
+  margin: auto;
+}
+
+.profile form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile form select {
+  margin-bottom: 1.25rem;
+  font-size: 1.125rem;
+}
+
+.profile form label {
+  font-weight: 700;
+  margin-bottom: .3125rem;
 }
