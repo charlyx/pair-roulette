@@ -58,10 +58,17 @@ export function FirebaseAuthProvider({ children }) {
           }
           setUser(signedInUser)
           try {
-            await firebase.firestore()
+            const ref = await firebase.firestore()
               .collection('users')
-              .doc(signedInUser.uid)
-              .set(signedInUser)
+              .doc(user.uid)
+              .get()
+
+            if (!ref.exists) {
+              await firebase.firestore()
+                .collection('users')
+                .doc(signedInUser.uid)
+                .set(signedInUser)
+            }
           } catch (e) {
             console.log('Some error with firebase', e)
           }
