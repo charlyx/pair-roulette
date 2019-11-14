@@ -25,7 +25,8 @@ export function FirebaseAuthProvider({ children }) {
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        // User is signed in.
+        const { credential } = await firebase.auth().getRedirectResult()
+
         try {
           const { credential } = await firebase.auth().getRedirectResult()
           // Call GitHub API to get user info
@@ -53,25 +54,26 @@ export function FirebaseAuthProvider({ children }) {
             displayName: user.displayName,
             email: user.email,
             photoURL: user.photoURL,
-            username,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           }
-          setUser(signedInUser)
-          try {
-            const ref = await firebase.firestore()
-              .collection('users')
-              .doc(user.uid)
-              .get()
 
-            if (!ref.exists) {
-              await firebase.firestore()
-                .collection('users')
-                .doc(signedInUser.uid)
-                .set(signedInUser)
-            }
-          } catch (e) {
-            console.log('Some error with firebase', e)
+          if (username) {
+            signedInUser[username] = username
           }
+
+          const ref = await firebase.firestore()
+            .collection('users')
+            .doc(user.uid)
+            .get()
+
+          if (!ref.exists) {
+            console.log(signedInUser)
+            await firebase.firestore()
+              .collection('users')
+              .doc(signedInUser.uid)
+              .set(signedInUser)
+          }
+          setUser(signedInUser)
           setIsSignedIn(true)
         } catch (e) {
           setSignInError(e)
@@ -80,6 +82,7 @@ export function FirebaseAuthProvider({ children }) {
         setUser(null)
         setIsSignedIn(false)
       }
+
       setLoading(false)
     })
   }, [])
