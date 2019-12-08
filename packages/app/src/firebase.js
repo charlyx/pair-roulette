@@ -25,30 +25,7 @@ export function FirebaseAuthProvider({ children }) {
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        const { credential } = await firebase.auth().getRedirectResult()
-
         try {
-          const { credential } = await firebase.auth().getRedirectResult()
-          // Call GitHub API to get user info
-          let username
-          const accessToken = credential && credential.accessToken
-          if (accessToken) {
-            try {
-              const resp = await fetch('https://api.github.com/user', {
-                method: 'GET',
-                headers: {
-                  'content-type': 'application/json',
-                  Authorization: `token ${accessToken}`,
-                },
-              })
-              const data = await resp.json()
-              username = data.login
-            } catch (e) {
-              console.error('Unable to get https://api.github.com/user')
-              console.error(e)
-            }
-          }
-
           const signedInUser = {
             uid: user.uid,
             displayName: user.displayName,
@@ -57,8 +34,10 @@ export function FirebaseAuthProvider({ children }) {
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           }
 
-          if (username) {
-            signedInUser[username] = username
+          const { additionalUserInfo } = await firebase.auth().getRedirectResult()
+
+          if (additionalUserInfo) {
+            signedInUser[username] = additionalUserInfo.username
           }
 
           const ref = await firebase.firestore()
@@ -67,7 +46,6 @@ export function FirebaseAuthProvider({ children }) {
             .get()
 
           if (!ref.exists) {
-            console.log(signedInUser)
             await firebase.firestore()
               .collection('users')
               .doc(signedInUser.uid)
