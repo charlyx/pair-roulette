@@ -37,7 +37,7 @@ export function FirebaseAuthProvider({ children }) {
           const { additionalUserInfo } = await firebase.auth().getRedirectResult()
 
           if (additionalUserInfo) {
-            signedInUser[username] = additionalUserInfo.username
+            signedInUser.username = additionalUserInfo.username
           }
 
           const ref = await firebase.firestore()
