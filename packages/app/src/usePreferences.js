@@ -17,7 +17,7 @@ export function usePreferences() {
       .doc(user.uid)
       .get()
       .then(doc => doc.data())
-      .then(data => data.langages)
+      .then(data => data.langages || [])
       .then(setLangages)
   }, [loading])
 

@@ -1,14 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function itsMyProfile() { return resource.data.uid == request.auth.uid }
-    function itsMe() { return request.resource.data.uid == request.auth.uid }
+    function itsMe(userId) { return userId == request.auth.uid }
     function userNotExists() { return !exists(/databases/$(database)/documents/users/$(request.auth.uid)) }
     
     match /users/{userId} {
-      allow read: if itsMyProfile();
-      allow update: if itsMyProfile() && request.resource.data.modifiedAt == request.time;
-      allow create: if itsMe() && userNotExists() && request.resource.data.createdAt == request.time;
+      allow read: if itsMe(userId);
+      allow update: if itsMe(userId) && request.resource.data.modifiedAt == request.time;
+      allow create: if itsMe(userId) && userNotExists() && request.resource.data.createdAt == request.time;
     }
   }
 }

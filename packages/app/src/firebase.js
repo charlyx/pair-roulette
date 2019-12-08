@@ -25,53 +25,33 @@ export function FirebaseAuthProvider({ children }) {
   useEffect(() => {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        // User is signed in.
         try {
-          const { credential } = await firebase.auth().getRedirectResult()
-          // Call GitHub API to get user info
-          let username
-          const accessToken = credential && credential.accessToken
-          if (accessToken) {
-            try {
-              const resp = await fetch('https://api.github.com/user', {
-                method: 'GET',
-                headers: {
-                  'content-type': 'application/json',
-                  Authorization: `token ${accessToken}`,
-                },
-              })
-              const data = await resp.json()
-              username = data.login
-            } catch (e) {
-              console.error('Unable to get https://api.github.com/user')
-              console.error(e)
-            }
-          }
-
           const signedInUser = {
             uid: user.uid,
             displayName: user.displayName,
             email: user.email,
             photoURL: user.photoURL,
-            username,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           }
-          setUser(signedInUser)
-          try {
-            const ref = await firebase.firestore()
-              .collection('users')
-              .doc(user.uid)
-              .get()
 
-            if (!ref.exists) {
-              await firebase.firestore()
-                .collection('users')
-                .doc(signedInUser.uid)
-                .set(signedInUser)
-            }
-          } catch (e) {
-            console.log('Some error with firebase', e)
+          const { additionalUserInfo } = await firebase.auth().getRedirectResult()
+
+          if (additionalUserInfo) {
+            signedInUser[username] = additionalUserInfo.username
           }
+
+          const ref = await firebase.firestore()
+            .collection('users')
+            .doc(user.uid)
+            .get()
+
+          if (!ref.exists) {
+            await firebase.firestore()
+              .collection('users')
+              .doc(signedInUser.uid)
+              .set(signedInUser)
+          }
+          setUser(signedInUser)
           setIsSignedIn(true)
         } catch (e) {
           setSignInError(e)
@@ -80,6 +60,7 @@ export function FirebaseAuthProvider({ children }) {
         setUser(null)
         setIsSignedIn(false)
       }
+
       setLoading(false)
     })
   }, [])
