@@ -1,8 +1,27 @@
 const functions = require('firebase-functions');
+const firebase = require('firebase-admin')
+const roulette = require('./roulette.function')
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+const app = firebase.initializeApp()
+
+exports.askForMatch = functions.https.onCall(async (data, context) => {
+  const user = {
+    uid: context.auth.uid,
+    username: context.auth.token.name,
+  }
+
+  const pair = await roulette(user.uid, app)
+
+  if (!pair) return
+
+  await app.firestore().collection('invites').add({
+    from: user,
+    to: {
+      uid: pair.uid,
+      username: pair.username,
+    },
+    mates: [user.uid, pair.uid],
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    status: 'PENDING',
+  })
+});

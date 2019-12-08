@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState, createContext } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/functions'
 import config from './config.json'
 
 firebase.initializeApp(config)
