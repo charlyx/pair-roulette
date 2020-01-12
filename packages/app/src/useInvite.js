@@ -6,7 +6,6 @@ import { useFirebaseAuth, useFirebaseApp } from './firebase';
 
 export function useInvite() {
   const [invite, setInvite] = useState()
-  console.log(invite)
   const app = useFirebaseApp('pair-roulette')
   const { user, loading } = useFirebaseAuth()
 
@@ -19,19 +18,29 @@ export function useInvite() {
       .where('status', '==', 'PENDING')
       .get()
 
-    ref
-      .then(snapshot => snapshot.docs[0].data())
-      .then(data => setInvite({ id: ref.id, ...data }))
+      .then(async snapshot => {
+        if (!snapshot.docs.length) return
+        const data = await snapshot.docs[0].data()
+        setInvite({
+          id: snapshot.docs[0].id,
+          ...data,
+        })
+      })
   }, [loading])
 
-  return [
+  const updateInvite = (isAccepted = true, comment = '') => app.firestore()
+    .collection('invites')
+    .doc(invite.id)
+    .update({
+      status: isAccepted ? 'ACCEPTED' : 'REJECTED',
+      comment,
+    })
+    .then(() => setInvite({ ...invite, status: isAccepted ? 'ACCEPTED' : 'REJECTED' }))
+
+  return {
     invite,
-    (isAccepted = true) => app.firestore()
-      .collection('invites')
-      .doc(invite.id)
-      .update({
-        status: isAccepted ? 'ACCEPTED' : 'REJECTED',
-      })
-      .then(() => setInvite({ ...invite, status: isAccepted ? 'ACCEPTED' : 'REJECTED' }))
-  ]
+    setInvite,
+    acceptInvite: () => updateInvite(true),
+    rejectInvite: comment => updateInvite(false, comment),
+  }
 }

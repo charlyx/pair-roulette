@@ -50,7 +50,10 @@ export function FirebaseAuthProvider({ children }) {
             await firebase.firestore()
               .collection('users')
               .doc(signedInUser.uid)
-              .set(signedInUser)
+              .set({
+                available: true,
+                ...signedInUser
+              })
           }
           setUser(signedInUser)
           setIsSignedIn(true)

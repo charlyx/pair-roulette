@@ -9,5 +9,9 @@ service cloud.firestore {
       allow update: if itsMe(userId) && request.resource.data.modifiedAt == request.time;
       allow create: if itsMe(userId) && userNotExists() && request.resource.data.createdAt == request.time;
     }
+
+    match /invites/{inviteId} {
+      allow read, update: if resource.data.from.uid == request.auth.uid || resource.data.to.uid == request.auth.uid;
+    }
   }
 }

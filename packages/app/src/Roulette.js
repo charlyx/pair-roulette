@@ -12,7 +12,7 @@ const askForMatch = app.functions().httpsCallable('askForMatch')
 export function Roulette() {
   const { signOut, user } = useFirebaseAuth()
   const [preferences, updatePreferences] = usePreferences()
-  const [invite, acceptInvite] = useInvite()
+  const {invite, acceptInvite, rejectInvite, setInvite} = useInvite()
 
   return (
     <div className="profile">
@@ -27,8 +27,14 @@ export function Roulette() {
               {invite.mates.join(' VS ')}
               {invite.to.uid === user.uid ? (
                 <>
-                  <button onClick={() => acceptInvite(true)}>Accept match</button>
-                  <button onClick={() => acceptInvite(false)}>Reject match</button>
+                  <button onClick={() => acceptInvite()}>Accept match</button>
+                  <button onClick={() => {
+                      const comment = prompt('Any comment?')
+                      rejectInvite(comment)
+                    }}
+                  >
+                    Reject match
+                  </button>
                 </>
               ) : (
                 <p>Invite sent</p>
@@ -36,7 +42,9 @@ export function Roulette() {
             </div>
           ) : (
             <button
-              onClick={() => askForMatch()}
+              onClick={() => askForMatch().then(result => {
+                setInvite(result.data)
+              })}
             >
               Find a pair-programming mate!
             </button>

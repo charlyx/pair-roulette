@@ -14,7 +14,7 @@ exports.askForMatch = functions.https.onCall(async (data, context) => {
 
   if (!pair) return
 
-  await app.firestore().collection('invites').add({
+  const newInvite = {
     from: user,
     to: {
       uid: pair.uid,
@@ -23,5 +23,12 @@ exports.askForMatch = functions.https.onCall(async (data, context) => {
     mates: [user.uid, pair.uid],
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     status: 'PENDING',
-  })
+  }
+
+  const ref = await app.firestore().collection('invites').add(newInvite)
+
+  return {
+    id: ref.id,
+    ...newInvite,
+  }
 });
