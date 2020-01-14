@@ -1,13 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { useFirebaseAuth, useFirebaseApp } from './firebase';
+import { useFirebaseAuth } from './firebase';
 
 import { Preferences } from './Preferences'
 import { usePreferences } from './usePreferences'
 import { useInvite } from './useInvite'
-
-const app = useFirebaseApp()
-const askForMatch = app.functions().httpsCallable('askForMatch')
+import { Finder } from './Finder'
 
 export function Roulette() {
   const { signOut, user } = useFirebaseAuth()
@@ -41,13 +39,7 @@ export function Roulette() {
               )}
             </div>
           ) : (
-            <button
-              onClick={() => askForMatch().then(result => {
-                setInvite(result.data)
-              })}
-            >
-              Find a pair-programming mate!
-            </button>
+            <Finder onLoad={setInvite} />
           )
         ) : (
           <>
