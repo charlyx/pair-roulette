@@ -22,7 +22,7 @@ export function Roulette() {
       </header>
       <main>
         {preferences.length > 0 ? (
-          invite ? (
+          invite && invite.status === 'PENDING' ? (
             <div>
               {invite.mates.join(' VS ')}
               {invite.to.uid === user.uid ? (

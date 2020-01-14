@@ -4,9 +4,12 @@ import 'firebase/auth'
 import 'firebase/firestore'
 import { useFirebaseAuth, useFirebaseApp } from './firebase';
 
+const app = useFirebaseApp('pair-roulette')
+const acceptInvite = app.functions().httpsCallable('acceptInvite')
+const rejectInvite = app.functions().httpsCallable('rejectInvite')
+
 export function useInvite() {
   const [invite, setInvite] = useState()
-  const app = useFirebaseApp('pair-roulette')
   const { user, loading } = useFirebaseAuth()
 
   useEffect(() => {
@@ -28,19 +31,18 @@ export function useInvite() {
       })
   }, [loading])
 
-  const updateInvite = (isAccepted = true, comment = '') => app.firestore()
-    .collection('invites')
-    .doc(invite.id)
-    .update({
-      status: isAccepted ? 'ACCEPTED' : 'REJECTED',
-      comment,
-    })
-    .then(() => setInvite({ ...invite, status: isAccepted ? 'ACCEPTED' : 'REJECTED' }))
-
   return {
     invite,
     setInvite,
-    acceptInvite: () => updateInvite(true),
-    rejectInvite: comment => updateInvite(false, comment),
+    acceptInvite: () => acceptInvite({ id: invite.id }).then(() => {
+      setInvite({ ...invite, status: 'ACCEPTED' })
+    }),
+    rejectInvite: comment => rejectInvite({
+      id: invite.id,
+      comment,
+      mates: invite.mates,
+    }).then(() => {
+      setInvite({ ...invite, status: 'REJECTED' })
+    }),
   }
 }

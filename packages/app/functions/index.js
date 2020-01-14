@@ -32,3 +32,27 @@ exports.askForMatch = functions.https.onCall(async (data, context) => {
     ...newInvite,
   }
 });
+
+exports.acceptInvite = functions.https.onCall(async ({ id }, context) => {
+  await updateInvite(id, true)
+});
+
+exports.rejectInvite = functions.https.onCall(async ({ id, comment, mates }, context) => {
+  await updateInvite(id, false, comment)
+
+  await Promise.all(mates.map(userId => {
+    return app.firestore().collection('users').doc(userId).update({
+      available: true,
+    })
+  }))
+});
+
+function updateInvite(id, isAccepted = true, comment = '') {
+  return app.firestore()
+    .collection('invites')
+    .doc(id)
+    .update({
+      status: isAccepted ? 'ACCEPTED' : 'REJECTED',
+      comment,
+    })
+}
