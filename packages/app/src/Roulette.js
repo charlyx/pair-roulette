@@ -6,6 +6,7 @@ import { Preferences } from './Preferences'
 import { usePreferences } from './usePreferences'
 import { useInvite } from './useInvite'
 import { Finder } from './Finder'
+import { Invite } from './Invite'
 
 export function Roulette() {
   const { signOut, user } = useFirebaseAuth()
@@ -21,23 +22,12 @@ export function Roulette() {
       <main>
         {preferences.length > 0 ? (
           invite && invite.status === 'PENDING' ? (
-            <div>
-              {invite.mates.join(' VS ')}
-              {invite.to.uid === user.uid ? (
-                <>
-                  <button onClick={() => acceptInvite()}>Accept match</button>
-                  <button onClick={() => {
-                      const comment = prompt('Any comment?')
-                      rejectInvite(comment)
-                    }}
-                  >
-                    Reject match
-                  </button>
-                </>
-              ) : (
-                <p>Invite sent</p>
-              )}
-            </div>
+            <Invite
+              accept={acceptInvite}
+              reject={rejectInvite} 
+              languages={invite.from.langages}
+              sent={invite.from.uid === user.uid}
+            />
           ) : (
             <Finder onLoad={setInvite} />
           )

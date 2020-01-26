@@ -5,22 +5,32 @@ const roulette = require('./roulette.function')
 const app = firebase.initializeApp()
 
 exports.askForMatch = functions.https.onCall(async (data, context) => {
-  const user = {
+  const sender = {
     uid: context.auth.uid,
     username: context.auth.token.name,
   }
 
-  const pair = await roulette(user.uid, app)
+  const pair = await roulette(sender.uid, app)
 
   if (!pair) return
 
+  const { langages } = await app.firestore()
+    .collection('users')
+    .doc(sender.uid)
+    .get()
+    .then(docRef => docRef.data())
+
   const newInvite = {
-    from: user,
+    from: {
+      ...sender,
+      langages,
+    },
     to: {
       uid: pair.uid,
       username: pair.username,
+      langages: pair.langages,
     },
-    mates: [user.uid, pair.uid],
+    mates: [sender.uid, pair.uid],
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     status: 'PENDING',
   }
