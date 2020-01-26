@@ -30,6 +30,6 @@ export function usePreferences() {
         langages: newLangages,
         modifiedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
-      .then(() => setLangages(langages))
+      .then(() => setLangages(newLangages))
   ]
 }

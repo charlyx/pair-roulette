@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
+
 import { useFirebaseAuth } from './firebase';
 
 import { Preferences } from './Preferences'
 import { usePreferences } from './usePreferences'
+import { useInvite } from './useInvite'
+import { Finder } from './Finder'
+import { Invite } from './Invite'
 
 export function Roulette() {
   const { signOut, user } = useFirebaseAuth()
   const [preferences, updatePreferences] = usePreferences()
+  const {invite, acceptInvite, rejectInvite, setInvite} = useInvite()
 
   return (
     <div className="profile">
@@ -16,7 +21,16 @@ export function Roulette() {
       </header>
       <main>
         {preferences.length > 0 ? (
-          <div>C'est parti!</div>
+          invite && invite.status === 'PENDING' ? (
+            <Invite
+              accept={acceptInvite}
+              reject={rejectInvite} 
+              languages={invite.from.langages}
+              sent={invite.from.uid === user.uid}
+            />
+          ) : (
+            <Finder onLoad={setInvite} />
+          )
         ) : (
           <>
             <h1>Choose your languages preferences</h1>

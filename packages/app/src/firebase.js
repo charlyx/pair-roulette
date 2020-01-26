@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState, createContext } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/functions'
 import config from './config.json'
 
 firebase.initializeApp(config)
@@ -49,7 +50,10 @@ export function FirebaseAuthProvider({ children }) {
             await firebase.firestore()
               .collection('users')
               .doc(signedInUser.uid)
-              .set(signedInUser)
+              .set({
+                available: true,
+                ...signedInUser
+              })
           }
           setUser(signedInUser)
           setIsSignedIn(true)
